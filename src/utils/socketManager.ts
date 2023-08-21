@@ -3,7 +3,7 @@ import { Socket, io } from 'socket.io-client'
 let socket: Socket
 
 function initializeSocket(): Socket {
-  socket = io('http://192.168.0.101:3000')
+  socket = io('https://tictactoe-server-react-native.onrender.com')
 
   socket.on('connect', () => {
     console.log('Connected to server')
