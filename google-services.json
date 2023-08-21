@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "829737553630",
+    "project_id": "tictactoe-40668",
+    "storage_bucket": "tictactoe-40668.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:829737553630:android:e98901ec24e41e40987c4f",
+        "android_client_info": {
+          "package_name": "com.remapple.tictactoe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "829737553630-4k1lgnd51rjhk3n9pkc7deskqft6vffa.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.remapple.tictactoe",
+            "certificate_hash": "4055cfe00fb7b54c633591cfe029aa36300be450"
+          }
+        },
+        {
+          "client_id": "829737553630-ieul447ff50v8im92hlmti02lb1ihit6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA0WHULbWJgTiDIAXyxIxlJZAL3km24n24"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "829737553630-ieul447ff50v8im92hlmti02lb1ihit6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
