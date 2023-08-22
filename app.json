@@ -26,9 +26,10 @@
       },
       "package": "com.remapple.tictactoe",
       "permissions": [
-        "CAMERA",
-        "RECORD_AUDIO",
-        "ACCESS_FINE_LOCATION"
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.MODIFY_AUDIO_SETTINGS"
       ]
     },
     "web": {
@@ -55,6 +56,12 @@
         }
       ]
     ],
-    "owner": "nganaremba"
+    "owner": "nganaremba",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/c9be2c28-f99e-4773-ac32-b87bd20098e7"
+    }
   }
 }

@@ -7,6 +7,9 @@ commands
 android
 ios
 
+*.apk
+application*
+
 # Expo
 .expo/
 dist/

@@ -31,7 +31,8 @@ import TextInputCustom from '../components/TextInputCustom'
 
 // Configure for native google signin
 GoogleSignin.configure({
-  webClientId: process.env.EXPO_PUBLIC_WEB_CLIENT_ID, // client ID of type WEB for your server (needed to verify user ID and offline access)
+  webClientId:
+    '829737553630-o562ai3bg6f3ngomktbonm6bc28a2034.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
 })
 
 // To close the web browser when auth completed
