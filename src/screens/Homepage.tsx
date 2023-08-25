@@ -34,10 +34,6 @@ const Homepage: React.FC<HomepagePropTypes> = ({ navigation }) => {
   const { closeSplashScreen, initializeSocket, getSocket } = storeContext
 
   useEffect(() => {
-    console.log(roomIdToJoin)
-  }, [roomIdToJoin])
-
-  useEffect(() => {
     initializeSocket()
     const socket = getSocket()
     socket.on('checkIfRoomExistResponse', ({ isSuccess }) => {
@@ -65,7 +61,6 @@ const Homepage: React.FC<HomepagePropTypes> = ({ navigation }) => {
 
   const joinRoom = useCallback(() => {
     const socket = getSocket()
-    console.log(roomIdToJoin)
 
     socket.emit('checkIfRoomExist', roomIdToJoin)
   }, [roomIdToJoin])

@@ -14,15 +14,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "829737553630-4k1lgnd51rjhk3n9pkc7deskqft6vffa.apps.googleusercontent.com",
+          "client_id": "829737553630-h0tqc8tpnnsot77f13ianmc04irrugae.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.remapple.tictactoe",
-            "certificate_hash": "4055cfe00fb7b54c633591cfe029aa36300be450"
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
           }
         },
         {
-          "client_id": "829737553630-ieul447ff50v8im92hlmti02lb1ihit6.apps.googleusercontent.com",
+          "client_id": "829737553630-o562ai3bg6f3ngomktbonm6bc28a2034.apps.googleusercontent.com",
           "client_type": 3
         }
       ],

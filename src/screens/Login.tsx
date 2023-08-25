@@ -31,8 +31,7 @@ import TextInputCustom from '../components/TextInputCustom'
 
 // Configure for native google signin
 GoogleSignin.configure({
-  webClientId:
-    '829737553630-o562ai3bg6f3ngomktbonm6bc28a2034.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
+  webClientId: process.env.EXPO_PUBLIC_WEB_CLIENT_ID, // client ID of type WEB for your server (needed to verify user ID and offline access)
 })
 
 // To close the web browser when auth completed
@@ -111,11 +110,12 @@ const Login = () => {
         )
       } else {
         // some other error happened
+        ToastAndroid.show(JSON.stringify(error), ToastAndroid.LONG)
       }
     }
   }
 
-  // Sign in with google hook to redirect to web
+  // ! Sign in with google hook to redirect to web
   const [request, response, promptAsync] = Google.useAuthRequest({
     androidClientId: process.env.EXPO_PUBLIC_WEB_CLIENT_ID,
   })
@@ -165,7 +165,7 @@ const Login = () => {
         ToastAndroid.LONG
       )
     }
-  }, [username, email])
+  }, [username, email, image])
 
   return (
     <>
@@ -230,6 +230,7 @@ const Login = () => {
                     label='Email'
                     onChangeText={onChangeEmail}
                     value={email}
+                    keyboardType='email-address'
                   />
 
                   <Pressable

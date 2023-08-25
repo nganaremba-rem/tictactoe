@@ -13,20 +13,24 @@ type UserTypes = {
   currentTurnSocketId: string
 }
 
-const UserCard = ({
+const userImage = require('../../assets/images/user.png')
+
+function UserCard({
   id,
   isX,
   name,
   photo,
   userSocketId,
   currentTurnSocketId,
-}: UserTypes) => {
+}: UserTypes) {
   return (
     <View
       key={id}
       style={{
-        maxWidth: 180,
-        maxHeight: 250,
+        width: 170,
+        height: 240,
+        maxWidth: 170,
+        maxHeight: 240,
       }}
       className={`${
         currentTurnSocketId === id ? 'bg-green-700' : 'bg-[#28175C]'
@@ -40,7 +44,7 @@ const UserCard = ({
 
       <Image
         source={{
-          uri: photo,
+          uri: photo || userImage,
         }}
         width={90}
         height={90}

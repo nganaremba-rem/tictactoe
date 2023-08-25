@@ -1,7 +1,7 @@
-import { RouteProp, useNavigation } from '@react-navigation/native'
-import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import { Audio } from 'expo-av'
 import React, { useCallback, useEffect, useState } from 'react'
 import {
+  ActivityIndicator,
   BackHandler,
   Image,
   Modal,
@@ -13,81 +13,24 @@ import {
   View,
 } from 'react-native'
 import { Socket } from 'socket.io-client'
+import { initialGameBoard } from '../../constants/initialGameBoard'
+import Box from '../components/Box'
 import UserCard from '../components/UserCard'
+import UserCardSkeleton from '../components/UserCardSkeleton'
 import useAuthContext from '../hooks/useAuthContext'
 import useStoreContext from '../hooks/useStoreContext'
-import { RootStackParamList } from './Route'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import X from '../components/X'
-import O from '../components/O'
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
-import { Audio } from 'expo-av'
+import { BoxTypes, GamePropTypes, User } from './types/GamePageTypes'
 
 const winnerImage = require('../../assets/images/win.png')
 const loserImage = require('../../assets/images/lose.jpg')
 const drawImage = require('../../assets/images/draw.png')
-
-type GamePropTypes = {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'Game'>
-  route: RouteProp<RootStackParamList, 'Game'>
-}
-type Box = {
-  index: number
-  value: null | 'X' | 'O'
-}
-
-const initialGameBoard = [
-  {
-    index: 1,
-    value: null,
-  },
-  {
-    index: 2,
-    value: null,
-  },
-  {
-    index: 3,
-    value: null,
-  },
-  {
-    index: 4,
-    value: null,
-  },
-  {
-    index: 5,
-    value: null,
-  },
-  {
-    index: 6,
-    value: null,
-  },
-  {
-    index: 7,
-    value: null,
-  },
-  {
-    index: 8,
-    value: null,
-  },
-  {
-    index: 9,
-    value: null,
-  },
-]
-
-type User = {
-  name: string
-  photo: string
-  isX: boolean
-  id: string
-}
 
 const Game: React.FC<GamePropTypes> = ({ navigation, route }) => {
   const [currentSocket, setCurrentSocket] = useState<Socket>()
   const { roomId } = route.params
   const storeContext = useStoreContext()
   const { userInfo } = useAuthContext()
-  const [gameBoard, setGameBoard] = useState<Box[]>(initialGameBoard)
+  const [gameBoard, setGameBoard] = useState<BoxTypes[]>(initialGameBoard)
   const [players, setPlayers] = useState<User[]>()
   const [me, setMe] = useState<User>()
   const [socketIdForCurrentTurn, setSocketIdForCurrentTurn] =
@@ -100,36 +43,13 @@ const Game: React.FC<GamePropTypes> = ({ navigation, route }) => {
     useState(false)
   const [playerLeft, setPlayerLeft] = useState(false)
   const [winningIndexes, setWinningIndexes] = useState<number[]>()
-  const [winnerAudio, setWinnerAudio] = useState<Audio.Sound>()
-  const [loserAudio, setLoserAudio] = useState<Audio.Sound>()
-  const [buttonClickAudio, setButtonClickAudio] = useState<Audio.Sound>()
+  const [pageIsLoading, setPageIsLoading] = useState<boolean>(true)
 
   if (!storeContext) return null
 
   const { getSocket } = storeContext
 
   const backHandler = useCallback(() => true, [])
-
-  //   const loadSound = async () => {
-  //     console.log('Loading Sound')
-  //     try {
-  //       const winnerAudioResponse = await Audio.Sound.createAsync(
-  //         require('../../assets/audio/winner.mp3')
-  //       )
-  //       const loserAudioResponse = await Audio.Sound.createAsync(
-  //         require('../../assets/audio/loser.mp3')
-  //       )
-  //       const buttonClickAudioResponse = await Audio.Sound.createAsync(
-  //         require('../../assets/audio/buttonClick.mp3')
-  //       )
-  //       setWinnerAudio(winnerAudioResponse.sound)
-  //       setLoserAudio(loserAudioResponse.sound)
-  //       setButtonClickAudio(buttonClickAudioResponse.sound)
-  //       console.log('sound loaded')
-  //     } catch (err) {
-  //       console.log(err)
-  //     }
-  //   }
 
   const playWinnerSound = async () => {
     try {
@@ -199,7 +119,7 @@ const Game: React.FC<GamePropTypes> = ({ navigation, route }) => {
     })
 
     // update UI if new input
-    socket.on('receivingDraw', (board: Box[]) => {
+    socket.on('receivingDraw', (board: BoxTypes[]) => {
       setGameBoard(board)
       playButtonClickSound()
     })
@@ -256,11 +176,13 @@ const Game: React.FC<GamePropTypes> = ({ navigation, route }) => {
     return () => {
       socket.emit('leaveRoom', roomId)
       backHandlerSubscription.remove()
-      winnerAudio && winnerAudio.unloadAsync()
-      loserAudio && loserAudio.unloadAsync()
-      buttonClickAudio && buttonClickAudio.unloadAsync()
     }
   }, [])
+
+  // check if page is finished loading
+  useEffect(() => {
+    if (players) setPageIsLoading(false)
+  }, [players])
 
   function leaveRoom() {
     navigation.goBack()
@@ -286,6 +208,22 @@ const Game: React.FC<GamePropTypes> = ({ navigation, route }) => {
 
   return (
     <>
+      <Modal
+        visible={pageIsLoading}
+        transparent
+        // onRequestClose={() => setPageIsLoading(false)}
+      >
+        <View className='flex-1 justify-center items-center bg-[#00000083]'>
+          <Text
+            className='text-white text-2xl py-4'
+            style={{ fontFamily: 'LilitaOne_400Regular' }}
+          >
+            Creating room please wait...
+          </Text>
+          <ActivityIndicator size={40} />
+        </View>
+      </Modal>
+
       <View className='bg-[#3B2496] flex-1'>
         <StatusBar backgroundColor={'#3B2496'} barStyle={'light-content'} />
         <ScrollView
@@ -432,6 +370,7 @@ const Game: React.FC<GamePropTypes> = ({ navigation, route }) => {
 
           {/* User Cards */}
           <View className='flex-row gap-5 justify-center py-10'>
+            {pageIsLoading && <UserCardSkeleton />}
             {players?.map((player) => {
               return (
                 <View key={player.id}>
@@ -450,22 +389,15 @@ const Game: React.FC<GamePropTypes> = ({ navigation, route }) => {
               const isWiningIndex = winningIndexes?.includes(idx) || false
               const backgroundColor = isWiningIndex ? 'green' : '#332267'
               return (
-                <TouchableOpacity
-                  key={idx}
-                  onPress={() => {
-                    if (!isBoardDisabled) drawOnBoard(box.index)
-                  }}
-                  style={{
-                    backgroundColor,
-                  }}
-                  className='min-w-[28%] min-h-[115px] m-2 rounded-3xl justify-center items-center'
-                >
-                  {box.value === 'O' ? (
-                    <O winIdx={isWiningIndex} fontSize={80} />
-                  ) : (
-                    box.value && <X winIdx={isWiningIndex} fontSize={80} />
-                  )}
-                </TouchableOpacity>
+                <Box
+                  key={box.index}
+                  backgroundColor={backgroundColor}
+                  box={box}
+                  drawOnBoard={drawOnBoard}
+                  idx={idx}
+                  isBoardDisabled={isBoardDisabled}
+                  isWiningIndex={isWiningIndex}
+                />
               )
             })}
           </View>
